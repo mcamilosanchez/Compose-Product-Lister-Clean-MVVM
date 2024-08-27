@@ -1,4 +1,4 @@
-# ComposeProductLister_CleanMVVM
+# Compose Product Lister Clean MVVM
 
 **ComposeProductLister_CleanMVVM** es una aplicación de Android desarrollada en Kotlin utilizando exclusivamente Jetpack Compose para la interfaz de usuario. La aplicación permite a los usuarios explorar y buscar productos de manera eficiente y atractiva, aplicando Clean Architecture combinada con el patrón MVVM, y siguiendo las mejores prácticas de desarrollo de Android para asegurar una experiencia de usuario robusta y sin fallos.
 
