@@ -1,7 +1,8 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.data
 
-import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModel
+import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModelData
 import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductProvider
+import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductsModelData
 import com.example.composeproductlister_cleanmvvm.listProducts.data.network.ProductService
 import javax.inject.Inject
 
@@ -13,18 +14,18 @@ class ProductRepository @Inject constructor(
     private val productProvider: ProductProvider
 ){
 
-    suspend fun getAllProducts(): List<ProductModel> {
+    suspend fun getAllProducts(): ProductsModelData {
 
         /** The "response" variable is a coroutine that calls the backend and returns the
          * product list **/
-        val response = api.getProducts()
+        val getProducts = api.getProduct()
 
         /** When the repository is executed for the first time, it will call the service
          * (api.getProducts) and the list it returns (listProducts), will be stored in
          * ProductProvider, which will be our personal DB **/
 
-        productProvider.products = response
-        return response
+        //productProvider.products = getProducts
+        return getProducts
     }
 
 }
