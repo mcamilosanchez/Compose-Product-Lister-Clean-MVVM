@@ -9,7 +9,7 @@ fun ProductModelData.toModel(): ProductModelDomain {
             id,
             title,
             description,
-            //price,
+            price,
             //discountPercentage,
             //rating,
             //stock,

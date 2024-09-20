@@ -12,8 +12,8 @@ data class ProductModelData(
     @SerializedName("description")
     val description : String,
 
-    //@SerializedName("price")
-    //val price : Int,
+    @SerializedName("price")
+    val price : Double,
 
     //@SerializedName("discountPercentage" )
     //val discountPercentage : Double,
