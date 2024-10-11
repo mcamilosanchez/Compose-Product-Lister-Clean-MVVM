@@ -1,11 +1,11 @@
-package com.example.composeproductlister_cleanmvvm.listProducts.data.mapper
+package com.example.composeproductlister_cleanmvvm.listProducts.domain.mapper
 
-import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModelData
+import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 import com.example.composeproductlister_cleanmvvm.listProducts.entities.ProductEntity
 
-fun ProductModelData.toEntity(): ProductEntity {
+fun ProductEntity.toDomainProduct(): ProductModelDomain {
     with(this) {
-        return ProductEntity(
+        return ProductModelDomain(
             id,
             title,
             description,

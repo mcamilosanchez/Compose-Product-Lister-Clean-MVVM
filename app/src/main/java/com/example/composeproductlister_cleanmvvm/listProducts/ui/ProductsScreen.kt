@@ -1,65 +1,90 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.ui
 
-import android.content.res.Resources.Theme
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModelData
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 import com.example.composeproductlister_cleanmvvm.ui.theme.ComposeProductLister_CleanMVVMTheme
+import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
+import com.example.composeproductlister_cleanmvvm.utils.Status
 
 @Composable
 fun ProductsScreen(modifier: Modifier = Modifier, productsViewModel: ProductsViewModel) {
 
     ComposeProductLister_CleanMVVMTheme {
-        val showDialog: Boolean by productsViewModel.showDialog.observeAsState(false)
+        val showErrorDialog by productsViewModel.showDialog.observeAsState(false)
+        val productsStatus by productsViewModel.status.observeAsState(
+            ResultWrapper.loading(data = null)
+        )
 
-        productsViewModel.onCreate()
+        /* LaunchedEffect: Remember that Composable functions can be executed multiple times during
+        UI recomposition, so it is crucial to control when side-effect operations such as network
+        calls or database updates are executed.*/
+        LaunchedEffect(key1 = Unit) {
+            // key1 = Unit ensures that it is executed only once
+            productsViewModel.onCreate()
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            ProductsList(productsViewModel)
+            when(productsStatus.status) {
+                Status.LOADING -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+                Status.ERROR -> {
+                    productsViewModel.onDialogShow()
+                }
+                Status.SUCCESS ->  ProductsList(productsViewModel)
+            }
+            if (showErrorDialog) {
+                AlertDialog(
+                    onDismissRequest = { productsViewModel.onDialogClose() },
+                    title = { Text("Error") },
+                    text = { Text(productsStatus.message ?: "Unknown Error") },
+                    confirmButton = {
+                        Button(onClick = {
+                            productsViewModel.onDialogClose()
+                            productsViewModel.onCreate()
+                        }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -68,7 +93,6 @@ fun ProductsScreen(modifier: Modifier = Modifier, productsViewModel: ProductsVie
 @Composable
 fun ProductsList(productsViewModel: ProductsViewModel) {
 
-    //Pendiente por revisar: El ProductModel de UI vs el de DATA
     val getProducts = productsViewModel.products
 
     LazyVerticalGrid(
