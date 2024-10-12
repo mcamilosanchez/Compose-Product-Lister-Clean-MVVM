@@ -24,9 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,7 +41,7 @@ import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
 import com.example.composeproductlister_cleanmvvm.utils.Status
 
 @Composable
-fun ProductsScreen(modifier: Modifier = Modifier, productsViewModel: ProductsViewModel) {
+fun ProductsScreen(productsViewModel: ProductsViewModel) {
 
     ComposeProductLister_CleanMVVMTheme {
         val showErrorDialog by productsViewModel.showDialog.observeAsState(false)
@@ -154,7 +151,7 @@ fun ItemProduct(product: ProductModelDomain) {
                     modifier = Modifier
                         .padding(end = 16.dp, bottom = 12.dp)
                         .weight(0.5f),
-                    text = "$${product.price.toString() ?: "???"}",
+                    text = "$${product.price.toString()}",
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
