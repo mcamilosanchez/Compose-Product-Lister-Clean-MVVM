@@ -115,16 +115,33 @@ fun ItemProduct(product: ProductModelDomain) {
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {
-            GlideImage(
-                model = product.images[0],
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.background),
-                contentScale = ContentScale.Inside,
-            )
+            if (product.images.isNotEmpty()) { // Check ifthe images list is not empty
+                GlideImage(
+                    model = product.images[0], // Access images[0] only if it exists
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.background),
+                    contentScale = ContentScale.Inside,
+                )
+            } else {
+                // Handle the case where there's no image
+                // You can display a placeholder image or a text message here
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Text(
+                        text = "No image available",
+                        modifier = Modifier.align(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
             Text(
                 modifier = Modifier
                     .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)

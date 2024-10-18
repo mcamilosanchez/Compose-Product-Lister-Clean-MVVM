@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModelData
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.GetProductsCaseUse
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
-import com.example.composeproductlister_cleanmvvm.utils.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,8 +44,7 @@ class ProductsViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ResultWrapper.loading(data = null)
             try {
-                val productsModelDomain = getProductsUseCase()
-                val listProducts: List<ProductModelDomain>? = productsModelDomain.products
+                val listProducts = getProductsUseCase()
                 _status.value = ResultWrapper.success(listProducts)
                 _products.clear()
                 _products.addAll(listProducts ?: emptyList())

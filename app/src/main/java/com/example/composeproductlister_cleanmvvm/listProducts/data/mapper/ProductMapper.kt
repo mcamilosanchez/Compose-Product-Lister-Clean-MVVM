@@ -1,22 +1,12 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.data.mapper
 
-import com.example.composeproductlister_cleanmvvm.listProducts.data.model.ProductModelData
-import com.example.composeproductlister_cleanmvvm.listProducts.entities.ProductEntity
+import com.example.composeproductlister_cleanmvvm.listProducts.data.database.entities.ProductEntity
+import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 
-fun ProductModelData.toEntity(): ProductEntity {
-    with(this) {
-        return ProductEntity(
-            id,
-            title,
-            description,
-            price,
-            //discountPercentage,
-            //rating,
-            //stock,
-            brand,
-            //category,
-            //thumbnail,
-            images
-        )
-    }
-}
+fun ProductModelDomain.toDatabase() = ProductEntity(
+    title = title,
+    description = description,
+    price = price,
+    brand = brand,
+    images = images
+)

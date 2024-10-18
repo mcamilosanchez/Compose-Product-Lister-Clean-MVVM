@@ -15,6 +15,7 @@ retrofit2Version = "2.9.0"
 coroutineVersion = "1.3.6"
 glideVersion = "1.0.0-alpha.1"
 uiTextGoogleFonts = "1.7.1"
+room-version = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,11 +34,11 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 #Dagger Hilt
-dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion"}
-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion"}
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion" }
 
 #Live Data
-live-data = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "liveDataVersion"}
+live-data = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "liveDataVersion" }
 
 #Retrofit2
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2Version" }
@@ -47,10 +48,15 @@ retrofit2-converter = { group = "com.squareup.retrofit2", name = "converter-gson
 coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutineVersion" }
 
 #Glide
-glide = {group= "com.github.bumptech.glide", name = "compose", version.ref = "glideVersion"}
+glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glideVersion" }
 
 #Google Fonts
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+
+#Room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room-version" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room-version" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room-version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
