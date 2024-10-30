@@ -115,9 +115,9 @@ fun ItemProduct(product: ProductModelDomain) {
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {
-            if (product.images.isNotEmpty()) { // Check ifthe images list is not empty
+            if (product.thumbnail.isNotEmpty()) { // Check if the images list is not empty
                 GlideImage(
-                    model = product.images[0], // Access images[0] only if it exists
+                    model = product.thumbnail,
                     contentDescription = "Product Image",
                     modifier = Modifier
                         .fillMaxWidth()

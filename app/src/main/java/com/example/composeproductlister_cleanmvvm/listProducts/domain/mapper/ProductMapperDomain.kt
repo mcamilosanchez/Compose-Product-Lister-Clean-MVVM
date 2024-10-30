@@ -11,12 +11,12 @@ fun ProductModelData.toDomainProduct(): ProductModelDomain {
             title,
             description,
             price,
-            //discountPercentage,
-            //rating,
-            //stock,
+            discountPercentage,
+            rating,
+            stock,
             brand,
-            //category,
-            //thumbnail,
+            category,
+            thumbnail,
             images
         )
     }
@@ -29,12 +29,12 @@ fun ProductEntity.toDomainProduct(): ProductModelDomain {
             title,
             description,
             price,
-            //discountPercentage,
-            //rating,
-            //stock,
+            discountPercentage,
+            rating,
+            stock,
             brand,
-            //category,
-            //thumbnail,
+            category,
+            thumbnail,
             images
         )
     }

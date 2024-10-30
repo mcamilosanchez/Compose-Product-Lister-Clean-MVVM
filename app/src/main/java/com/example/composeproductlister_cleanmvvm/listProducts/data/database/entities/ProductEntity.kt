@@ -14,12 +14,12 @@ data class ProductEntity(
     @ColumnInfo(name = "title" ) val title: String,
     @ColumnInfo(name = "description" ) val description: String,
     @ColumnInfo(name = "price" ) val price: Double?,
-    //@ColumnInfo(name = "discountPercentage" ) val discountPercentage: Double,
-    //@ColumnInfo(name = "rating" ) val rating: String,
-    //@ColumnInfo(name = "stock" ) val stock: Int,
+    @ColumnInfo(name = "discountPercentage" ) val discountPercentage: Double,
+    @ColumnInfo(name = "rating" ) val rating: String,
+    @ColumnInfo(name = "stock" ) val stock: Int,
     @ColumnInfo(name = "brand" ) val brand: String?,
-    //@ColumnInfo(name = "category" ) val category: String,
-    //@ColumnInfo(name = "thumbnail" ) val thumbnail: String,
+    @ColumnInfo(name = "category" ) val category: String,
+    @ColumnInfo(name = "thumbnail" ) val thumbnail: String,
     @ColumnInfo(name = "images" ) val images: ArrayList<String> = arrayListOf()
 )
 

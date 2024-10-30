@@ -15,23 +15,23 @@ data class ProductModelData(
     @SerializedName("price")
     val price : Double,
 
-    //@SerializedName("discountPercentage" )
-    //val discountPercentage : Double,
+    @SerializedName("discountPercentage" )
+    val discountPercentage : Double,
 
-    //@SerializedName("rating")
-    //val rating : String,
+    @SerializedName("rating")
+    val rating : String,
 
-    //@SerializedName("stock")
-    //val stock : Int,
+    @SerializedName("stock")
+    val stock : Int,
 
     @SerializedName("brand")
     val brand : String,
 
-    //@SerializedName("category")
-    //val category : String,
+    @SerializedName("category")
+    val category : String,
 
-    //@SerializedName("thumbnail")
-    //val thumbnail : String,
+    @SerializedName("thumbnail")
+    val thumbnail : String,
 
     @SerializedName("images")
     val images : ArrayList<String> = arrayListOf()

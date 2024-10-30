@@ -5,11 +5,11 @@ data class ProductModelDomain(
     val title: String,
     val description: String,
     val price: Double?,
-    //val discountPercentage: Double,
-    //val rating: String,
-    //val stock: Int,
+    val discountPercentage: Double,
+    val rating: String,
+    val stock: Int,
     val brand: String?,
-    //val category: String,
-    //val thumbnail: String,
+    val category: String,
+    val thumbnail: String,
     val images: ArrayList<String> = arrayListOf()
 )

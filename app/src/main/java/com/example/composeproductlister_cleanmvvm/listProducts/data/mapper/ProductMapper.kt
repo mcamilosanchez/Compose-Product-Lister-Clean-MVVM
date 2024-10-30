@@ -7,6 +7,11 @@ fun ProductModelDomain.toDatabase() = ProductEntity(
     title = title,
     description = description,
     price = price,
+    discountPercentage = discountPercentage,
+    rating = rating,
+    stock = stock,
     brand = brand,
-    images = images
+    category = category,
+    thumbnail = thumbnail,
+    images = images,
 )
