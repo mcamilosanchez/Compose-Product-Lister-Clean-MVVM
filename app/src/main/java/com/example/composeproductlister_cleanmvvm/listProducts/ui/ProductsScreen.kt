@@ -96,7 +96,7 @@ fun ProductsList(productsViewModel: ProductsViewModel) {
         columns = GridCells.Fixed(2),
         content = {
             items(getProducts) { product ->
-                ItemProduct(product = product)
+                ItemProduct(product = product, productsViewModel)
             }
         }
     )
@@ -105,13 +105,16 @@ fun ProductsList(productsViewModel: ProductsViewModel) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ItemProduct(product: ProductModelDomain) {
+fun ItemProduct(
+    product: ProductModelDomain,
+    productsViewModel: ProductsViewModel
+) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(12.dp))
-            .clickable { },
+            .clickable { productsViewModel.navigateToDetailScreen(product.title) },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {

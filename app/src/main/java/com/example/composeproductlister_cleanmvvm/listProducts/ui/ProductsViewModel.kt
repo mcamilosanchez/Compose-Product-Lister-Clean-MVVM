@@ -26,6 +26,14 @@ class ProductsViewModel @Inject constructor(
     private val _status = MutableLiveData<ResultWrapper<List<ProductModelDomain>>>()
     val status: LiveData<ResultWrapper<List<ProductModelDomain>>> = _status
 
+    /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
+    var onNavigateToDetail: ((String) -> Unit)? = null
+
+    fun navigateToDetailScreen(name: String) {
+        onNavigateToDetail?.invoke(name)
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     /* It's important to keep in mind the thread on which state variables are updated in Jetpack
     Compose, especially when working with components like AlertDialog that rely on UI recomposition.
     That's why we use POSTVALUE and not VALUE when we want to display Dialog*/

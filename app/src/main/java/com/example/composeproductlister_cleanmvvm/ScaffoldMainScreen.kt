@@ -36,7 +36,14 @@ import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewMo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldMainScreen(productsViewModel: ProductsViewModel) {
+fun ScaffoldMainScreen(
+    productsViewModel: ProductsViewModel,
+    navigateToDetail: (String) -> Unit
+) {
+    /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
+    productsViewModel.onNavigateToDetail = navigateToDetail
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     var presses by remember { mutableIntStateOf(0) }
 

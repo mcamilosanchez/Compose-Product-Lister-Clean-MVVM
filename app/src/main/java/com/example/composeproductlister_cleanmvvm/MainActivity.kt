@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.Surface
+import com.example.composeproductlister_cleanmvvm.core.navigation.NavigationWrapper
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.ui.theme.ComposeProductLister_CleanMVVMTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +22,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeProductLister_CleanMVVMTheme {
                 Surface {
-                    ScaffoldMainScreen(productsViewModel = productsViewModel)
+                    //ScaffoldMainScreen(productsViewModel = productsViewModel)
+                    NavigationWrapper(productsViewModel)
                 }
             }
         }
