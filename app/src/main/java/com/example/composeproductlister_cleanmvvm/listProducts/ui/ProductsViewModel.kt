@@ -27,10 +27,10 @@ class ProductsViewModel @Inject constructor(
     val status: LiveData<ResultWrapper<List<ProductModelDomain>>> = _status
 
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
-    var onNavigateToDetail: ((String) -> Unit)? = null
+    var onNavigateToDetail: ((Int) -> Unit)? = null
 
-    fun navigateToDetailScreen(name: String) {
-        onNavigateToDetail?.invoke(name)
+    fun navigateToDetailScreen(id: Int) {
+        onNavigateToDetail?.invoke(id)
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 

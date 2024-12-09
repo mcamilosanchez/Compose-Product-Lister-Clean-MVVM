@@ -1,5 +1,6 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -114,7 +115,9 @@ fun ItemProduct(
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(12.dp))
-            .clickable { productsViewModel.navigateToDetailScreen(product.title) },
+            .clickable {
+                Log.i("Id Product", product.id.toString())
+                productsViewModel.navigateToDetailScreen(product.id) },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {

@@ -1,7 +1,7 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.domain.data
 
 data class ProductModelDomain(
-    val id: Int = 0,
+    val id: Int,
     val title: String,
     val description: String,
     val price: Double?,

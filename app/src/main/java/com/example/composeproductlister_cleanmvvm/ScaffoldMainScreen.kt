@@ -38,7 +38,7 @@ import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewMo
 @Composable
 fun ScaffoldMainScreen(
     productsViewModel: ProductsViewModel,
-    navigateToDetail: (String) -> Unit
+    navigateToDetail: (Int) -> Unit
 ) {
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
     productsViewModel.onNavigateToDetail = navigateToDetail

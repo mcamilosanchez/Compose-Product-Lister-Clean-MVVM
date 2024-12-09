@@ -4,6 +4,7 @@ import com.example.composeproductlister_cleanmvvm.listProducts.data.database.ent
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 
 fun ProductModelDomain.toDatabase() = ProductEntity(
+    idProduct = id,
     title = title,
     description = description,
     price = price,
@@ -13,5 +14,5 @@ fun ProductModelDomain.toDatabase() = ProductEntity(
     brand = brand,
     category = category,
     thumbnail = thumbnail,
-    images = images,
+    images = images
 )
