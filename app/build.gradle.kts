@@ -88,6 +88,8 @@ dependencies {
 
     //Glide
     implementation(libs.glide)
+    implementation(libs.glide.glide)
+    kapt(libs.glide.kpt)
 
     //Room
     implementation(libs.room.runtime)

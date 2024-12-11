@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 object Home
 
 @Serializable
-object Detail
+object Detail {
+    const val Route = "detail/{productId}"
+    fun createRoute(productId: Int): String = "detail/$productId"
+}

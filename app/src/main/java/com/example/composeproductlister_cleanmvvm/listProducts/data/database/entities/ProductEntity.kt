@@ -9,8 +9,9 @@ data class ProductEntity(
     /* With PrimaryKey equal to TRUE we ensure that every time a ProductEntity object is created we
     will only pass the values that are after the ID (title, description, price...) and this value
     will be set automatically and will never be repeated.*/
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id" ) val id: Int = 0,
+    //@PrimaryKey(autoGenerate = true)
+    //@ColumnInfo(name = "id" ) val id: Int = 0,
+    @PrimaryKey
     @ColumnInfo(name = "idProduct" ) val idProduct: Int,
     @ColumnInfo(name = "title" ) val title: String,
     @ColumnInfo(name = "description" ) val description: String,

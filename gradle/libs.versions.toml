@@ -14,10 +14,12 @@ liveDataVersion = "1.2.1"
 retrofit2Version = "2.9.0"
 coroutineVersion = "1.3.6"
 glideVersion = "1.0.0-alpha.1"
+
 uiTextGoogleFonts = "1.7.1"
 room-version = "2.6.1"
 navigationCompose = "2.8.2"
 kotlinxSerialization = "1.6.3"
+glide-glideVersion = "4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +53,8 @@ coroutine = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-androi
 
 #Glide
 glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glideVersion" }
+glide-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide-glideVersion" }
+glide-kpt = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide-glideVersion" }
 
 #Google Fonts
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }

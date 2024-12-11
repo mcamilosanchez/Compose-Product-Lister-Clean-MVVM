@@ -44,7 +44,6 @@ fun ScaffoldMainScreen(
     productsViewModel.onNavigateToDetail = navigateToDetail
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     var presses by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -105,7 +104,10 @@ fun ScaffoldMainScreen(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            ProductsScreen(productsViewModel = productsViewModel)
+            ProductsScreen(
+                productsViewModel = productsViewModel,
+                navigateToDetail  = navigateToDetail
+            )
         }
     }
 }

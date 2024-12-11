@@ -42,7 +42,10 @@ import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
 import com.example.composeproductlister_cleanmvvm.utils.Status
 
 @Composable
-fun ProductsScreen(productsViewModel: ProductsViewModel) {
+fun ProductsScreen(
+    productsViewModel: ProductsViewModel,
+    navigateToDetail: (Int) -> Unit
+) {
 
     ComposeProductLister_CleanMVVMTheme {
         val showErrorDialog by productsViewModel.showDialog.observeAsState(false)
@@ -63,10 +66,11 @@ fun ProductsScreen(productsViewModel: ProductsViewModel) {
                 Status.LOADING -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                Status.ERROR -> {
-                    productsViewModel.onDialogShow()
-                }
-                Status.SUCCESS ->  ProductsList(productsViewModel)
+                Status.ERROR -> { productsViewModel.onDialogShow() }
+                Status.SUCCESS ->  ProductsList(
+                    products = productsViewModel.products,
+                    navigateToDetail = navigateToDetail
+                )
             }
             if (showErrorDialog) {
                 AlertDialog(
@@ -89,15 +93,19 @@ fun ProductsScreen(productsViewModel: ProductsViewModel) {
 
 
 @Composable
-fun ProductsList(productsViewModel: ProductsViewModel) {
-
-    val getProducts = productsViewModel.products
+fun ProductsList(
+    products: List<ProductModelDomain>,
+    navigateToDetail: (Int) -> Unit
+) {
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         content = {
-            items(getProducts) { product ->
-                ItemProduct(product = product, productsViewModel)
+            items(products) { product ->
+                ItemProduct(
+                    product = product,
+                    navigateToDetail = navigateToDetail
+                )
             }
         }
     )
@@ -108,7 +116,7 @@ fun ProductsList(productsViewModel: ProductsViewModel) {
 @Composable
 fun ItemProduct(
     product: ProductModelDomain,
-    productsViewModel: ProductsViewModel
+    navigateToDetail: (Int) -> Unit
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -116,8 +124,8 @@ fun ItemProduct(
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
-                Log.i("Id Product", product.id.toString())
-                productsViewModel.navigateToDetailScreen(product.id) },
+                navigateToDetail(product.id) // We call the navigation directly
+           },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {

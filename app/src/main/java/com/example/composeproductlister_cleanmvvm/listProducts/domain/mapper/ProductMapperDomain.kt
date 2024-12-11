@@ -25,7 +25,7 @@ fun ProductModelData.toDomainProduct(): ProductModelDomain {
 fun ProductEntity.toDomainProduct(): ProductModelDomain {
     with(this) {
         return ProductModelDomain(
-            id,
+            idProduct,
             title,
             description,
             price,

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.composeproductlister_cleanmvvm.listProducts.data.ProductRepository
 import com.example.composeproductlister_cleanmvvm.listProducts.data.database.entities.ProductEntity
 
 @Dao
@@ -18,5 +19,8 @@ interface ProductDao {
 
     @Query("DELETE FROM product_table")
     suspend fun deleteAllProducts()
+
+    @Query("SELECT * FROM product_table WHERE idProduct = :idProduct LIMIT 1")
+    suspend fun getProductById(idProduct: Int): ProductEntity?
 
 }

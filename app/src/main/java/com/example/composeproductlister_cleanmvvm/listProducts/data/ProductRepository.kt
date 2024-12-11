@@ -45,4 +45,10 @@ class ProductRepository @Inject constructor(
         productDao.deleteAllProducts()
     }
 
+    /** Get Product by its Id **/
+    suspend fun getProductById(productId: Int) : ProductModelDomain? {
+        val productEntity = productDao.getProductById(productId)
+        return productEntity?.toDomainProduct()
+    }
+
 }
