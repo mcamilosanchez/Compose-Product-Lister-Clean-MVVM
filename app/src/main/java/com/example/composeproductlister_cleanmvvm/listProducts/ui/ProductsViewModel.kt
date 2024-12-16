@@ -46,9 +46,13 @@ class ProductsViewModel @Inject constructor(
         _showDialog.postValue(true)
     }
 
+    init {
+        fetchProducts()
+    }
+
     /** In this method, we will call our use cases to return and store in memory all the
      * products. Since GetProductsCaseUse() returns a coroutine, we need the viewModelScope  **/
-    fun onCreate() {
+    fun fetchProducts() {
         viewModelScope.launch {
             _status.value = ResultWrapper.loading(data = null)
             try {

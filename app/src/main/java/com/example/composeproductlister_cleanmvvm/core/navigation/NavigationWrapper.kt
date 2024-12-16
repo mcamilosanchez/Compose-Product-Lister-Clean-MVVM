@@ -39,7 +39,8 @@ fun NavigationWrapper(
             if (productId != null) {
                 DetailScreen(
                     detailViewModel = detailViewModel,
-                    productId = productId
+                    productId = productId,
+                    onBackClick = { navController.popBackStack() }
                 )
             }
         }

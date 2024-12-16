@@ -55,11 +55,13 @@ fun ProductsScreen(
 
         /* LaunchedEffect: Remember that Composable functions can be executed multiple times during
         UI recomposition, so it is crucial to control when side-effect operations such as network
-        calls or database updates are executed.*/
+        calls or database updates are executed.
         LaunchedEffect(key1 = Unit) {
             // key1 = Unit ensures that it is executed only once
             productsViewModel.onCreate()
         }
+
+        */
 
         Box(modifier = Modifier.fillMaxSize()) {
             when(productsStatus.status) {
@@ -80,7 +82,7 @@ fun ProductsScreen(
                     confirmButton = {
                         Button(onClick = {
                             productsViewModel.onDialogClose()
-                            productsViewModel.onCreate()
+                            productsViewModel.fetchProducts()
                         }) {
                             Text("OK")
                         }

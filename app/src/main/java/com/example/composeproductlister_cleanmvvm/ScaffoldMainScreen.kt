@@ -1,7 +1,9 @@
 package com.example.composeproductlister_cleanmvvm
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -27,9 +29,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
@@ -54,29 +58,39 @@ fun ScaffoldMainScreen(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("General Store", fontWeight = FontWeight.Bold)
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "General Store",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             )
         },
-        bottomBar = {
+        /*bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { *//* do something *//* }) {
                         Icon(Icons.Filled.Check, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { *//* do something *//* }) {
                         Icon(
                             Icons.Filled.Edit,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { *//* do something *//* }) {
                         Icon(
                             Icons.Filled.Phone,
                             contentDescription = "Localized description",
                         )
                     }
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { *//* do something *//* }) {
                         Icon(
                             Icons.Filled.LocationOn,
                             contentDescription = "Localized description",
@@ -85,7 +99,7 @@ fun ScaffoldMainScreen(
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { /* do something */ },
+                        onClick = { *//* do something *//* },
                         containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                     ) {
@@ -93,7 +107,7 @@ fun ScaffoldMainScreen(
                     }
                 }
             )
-        },
+        },*/
 /*        floatingActionButton = {
             FloatingActionButton(onClick = { presses++ }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
