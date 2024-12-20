@@ -1,24 +1,24 @@
 # Compose Product Lister Clean MVVM
 
-**ComposeProductLister_CleanMVVM** es una aplicación de Android desarrollada en Kotlin utilizando exclusivamente Jetpack Compose para la interfaz de usuario. La aplicación permite a los usuarios explorar y buscar productos de manera eficiente y atractiva, aplicando Clean Architecture combinada con el patrón MVVM, y siguiendo las mejores prácticas de desarrollo de Android para asegurar una experiencia de usuario robusta y sin fallos.
+**ComposeProductLister_CleanMVVM** is an Android application developed in Kotlin, using Jetpack Compose exclusively for the user interface. The app allows users to explore and search for products efficiently and attractively, applying Clean Architecture combined with the MVVM pattern while following Android development best practices to ensure a robust and crash-free user experience.
 
-## Características principales
+## Main Features
 
-- **Consumo de APIs**: La aplicación consume recursos de internet mediante APIs para cargar productos y sus respectivas categorías, asegurando información actualizada y relevante.
-- **Listar productos**: Los productos se listan automáticamente según su rating, mostrando primero aquellos con mayor calificación.
-- **Filtros avanzados**: Los usuarios pueden aplicar filtros para ordenar los productos por precio, descuento, categoría, rating, stock y marca, personalizando su experiencia de búsqueda.
-- **Búsqueda de productos**: Funcionalidad de búsqueda integrada para encontrar rápidamente los productos deseados.
+- **API Integration**: The application fetches data from the internet using APIs to load products and their respective categories, ensuring up-to-date and relevant information.
+- **Product Listing**: Products are automatically listed based on their ratings, prioritizing those with the highest ratings.
+- **Advanced Filters**: Users can apply filters to sort products by price, discount, category, rating, stock, and brand, customizing their search experience.
+- **Product Search**: Integrated search functionality allows users to quickly find desired products.
 
-## Tecnologías y Arquitectura
+## Technologies and Architecture
 
-- **Lenguaje**: Desarrollada en Kotlin, aprovechando las características modernas y seguras del lenguaje.
-- **Jetpack Compose**: Toda la aplicación está desarrollada utilizando Jetpack Compose, lo que garantiza una UI declarativa, moderna y altamente personalizable.
-- **Base de datos**: Implementación de Room para el manejo de la base de datos local, asegurando un almacenamiento eficiente y acceso rápido a los datos.
-- **Arquitectura**: Aplicación de Clean Architecture para mantener una clara separación de responsabilidades y un código fácil de mantener, combinado con el patrón MVVM para la gestión de la UI y la lógica de presentación.
-- **Inyección de dependencias**: Uso de Hilt para la inyección de dependencias, facilitando la modularidad y escalabilidad del proyecto.
-- **Flows**: Implementación de Flows para el manejo reactivo de datos, asegurando una actualización eficiente y fluida de la UI.
-- **UX/UI**: Diseño de interfaz de usuario siguiendo las guías de Material3, proporcionando una experiencia visualmente atractiva y consistente. Se ha puesto un fuerte énfasis en ofrecer una UX intuitiva y sin complicaciones.
+- **Language**: Developed in Kotlin, leveraging the modern and safe features of the language.
+- **Jetpack Compose**: The entire application is built using Jetpack Compose, ensuring a declarative, modern, and highly customizable UI.
+- **Database**: Room is implemented for local database management, ensuring efficient storage and quick data access.
+- **Architecture**: Clean Architecture is applied to maintain a clear separation of concerns and easy-to-maintain code, combined with the MVVM pattern for UI and presentation logic management.
+- **Dependency Injection**: Hilt is used for dependency injection, enabling modularity and scalability of the project.
+- **Flows**: Reactive data handling is implemented using Flows, ensuring efficient and smooth UI updates.
+- **UX/UI**: User interface design follows Material3 guidelines, offering a visually appealing and consistent experience. Great emphasis has been placed on delivering an intuitive and hassle-free user experience.
 
-## Fiabilidad
+## Reliability
 
-- **Sin caídas**: La aplicación está optimizada para ser estable y no crashear, garantizando una experiencia de usuario fluida y sin interrupciones.
+- **Crash-Free**: The app is optimized to be stable and crash-free, ensuring a smooth and uninterrupted user experience.
