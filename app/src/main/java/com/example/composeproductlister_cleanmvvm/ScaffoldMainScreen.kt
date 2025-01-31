@@ -1,16 +1,23 @@
 package com.example.composeproductlister_cleanmvvm
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -35,16 +42,23 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.DetailViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldMainScreen(
     productsViewModel: ProductsViewModel,
+    detailViewModel: DetailViewModel,
     navigateToDetail: (Int) -> Unit
 ) {
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
+    val navController = rememberNavController()
     productsViewModel.onNavigateToDetail = navigateToDetail
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,49 +86,75 @@ fun ScaffoldMainScreen(
                 }
             )
         },
-        /*bottomBar = {
+        bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { *//* do something *//* }) {
-                        Icon(Icons.Filled.Check, contentDescription = "Localized description")
-                    }
-                    IconButton(onClick = { *//* do something *//* }) {
-                        Icon(
-                            Icons.Filled.Edit,
-                            contentDescription = "Localized description",
-                        )
-                    }
-                    IconButton(onClick = { *//* do something *//* }) {
-                        Icon(
-                            Icons.Filled.Phone,
-                            contentDescription = "Localized description",
-                        )
-                    }
-                    IconButton(onClick = { *//* do something *//* }) {
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Localized description",
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        IconButton(onClick = { navController.navigate("HomeProducts") }) {
+                            Icon(
+                                Icons.Filled.Home,
+                                contentDescription = "Home"
+                            )
+                        }
+                        IconButton(onClick = { }) {
+                            Icon(
+                                Icons.Filled.Search,
+                                contentDescription = "Search products",
+                            )
+                        }
+                        IconButton(onClick = { navController.navigate("ShoppingCart") }) {
+                            Icon(
+                                Icons.Filled.ShoppingCart,
+                                contentDescription = "ShoppingCart",
+                            )
+                        }
+                        IconButton(onClick = { }) {
+                            Icon(
+                                Icons.Filled.AccountCircle,
+                                contentDescription = "User Account",
+                            )
+                        }
                     }
                 },
-                floatingActionButton = {
+                /*floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { *//* do something *//* },
+                        onClick = { },
                         containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                     ) {
-                        Icon(Icons.Filled.Add, "Localized description")
+                        Icon(Icons.Filled.ShoppingCart, "ShoppingCart")
                     }
-                }
+                }*/
             )
-        },*/
+        },
 /*        floatingActionButton = {
             FloatingActionButton(onClick = { presses++ }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }*/
     ) { innerPadding ->
-        Column(
+        NavHost(
+            navController = navController,
+            startDestination = "HomeProducts",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("HomeProducts") {
+                ProductsScreen(
+                    productsViewModel = productsViewModel,
+                    navigateToDetail  = navigateToDetail
+                )
+            }
+            composable("ShoppingCart") {
+                ShoppingCartScreen(
+                    detailViewModel = detailViewModel
+                )
+            }
+        }
+
+        /*Column(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -122,6 +162,6 @@ fun ScaffoldMainScreen(
                 productsViewModel = productsViewModel,
                 navigateToDetail  = navigateToDetail
             )
-        }
+        }*/
     }
 }

@@ -127,7 +127,7 @@ fun ItemProduct(
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 navigateToDetail(product.id) // We call the navigation directly
-           },
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
     ) {
         Column {

@@ -23,7 +23,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,12 +57,15 @@ fun DetailScreen(
     onBackClick: () -> Unit
 ) {
 
-    //Query the product from the ViewModel
+    // Query the product from the ViewModel
     val product = detailViewModel.getProductById(productId).observeAsState().value
 
-    //Show content only if product is not null
+    // Show content only if product is not null
     product?.let {
-        DetailContent(product = it, onBackClick)
+        DetailContent(
+            product = it,
+            detailViewModel,
+            onBackClick)
     } ?: run {
         Text(
             text = "Loading product...",
@@ -71,7 +76,10 @@ fun DetailScreen(
 }
 
 @Composable
-fun DetailContent(product: ProductModelDomain, onBackClick: () -> Unit) {
+fun DetailContent(
+    product: ProductModelDomain,
+    detailViewModel: DetailViewModel,
+    onBackClick: () -> Unit) {
 
     Scaffold(
         topBar = { TopAppBar(onBackClick) }
@@ -96,8 +104,34 @@ fun DetailContent(product: ProductModelDomain, onBackClick: () -> Unit) {
                     Divider()
                     Description(product)
                     Divider()
+                    ButtonCart(product, detailViewModel)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ButtonCart(product: ProductModelDomain, detailViewModel: DetailViewModel,) {
+    Button(
+        onClick = {
+            detailViewModel.listProductIdCart(product.id)
+        },
+        modifier = Modifier.padding(16.dp).fillMaxWidth()
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "IconArt"
+            )
+            Text(
+                text = "Add to cart",
+                fontSize = 18.sp,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
     }
 }
@@ -237,7 +271,10 @@ fun RateProduct(product: ProductModelDomain) {
                     .weight(1f)
                     .fillMaxHeight()
             ) {
-                Row(Modifier.align(Alignment.Center).padding(start = 4.dp, end = 4.dp)) {
+                Row(
+                    Modifier
+                        .align(Alignment.Center)
+                        .padding(start = 4.dp, end = 4.dp)) {
                     Text(
                         text = "Brand: ",
                         fontSize = 16.sp,

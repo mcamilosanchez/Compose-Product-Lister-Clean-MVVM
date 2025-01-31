@@ -26,6 +26,7 @@ fun NavigationWrapper(
         composable<Home> {
             ScaffoldMainScreen(
                 productsViewModel = productsViewModel,
+                detailViewModel = detailViewModel,
                 navigateToDetail = { productId ->
                     navController.navigate(Detail.createRoute(productId))
                 }
