@@ -10,6 +10,7 @@ import com.example.composeproductlister_cleanmvvm.DetailScreen
 import com.example.composeproductlister_cleanmvvm.ScaffoldMainScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.DetailViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartScreen
 
 @Composable
 fun NavigationWrapper(
@@ -27,13 +28,14 @@ fun NavigationWrapper(
             ScaffoldMainScreen(
                 productsViewModel = productsViewModel,
                 detailViewModel = detailViewModel,
+                navController = navController,
                 navigateToDetail = { productId ->
                     navController.navigate(Detail.createRoute(productId))
                 }
             )
         }
         composable(
-            route = Detail.Route,
+            route = Detail.ROUTE,
             arguments = listOf(navArgument("productId") { type = NavType.IntType })
         ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
@@ -44,6 +46,11 @@ fun NavigationWrapper(
                     onBackClick = { navController.popBackStack() }
                 )
             }
+        }
+        composable<ShoppingCart> {
+            ShoppingCartScreen(
+                detailViewModel = detailViewModel
+            )
         }
     }
 }

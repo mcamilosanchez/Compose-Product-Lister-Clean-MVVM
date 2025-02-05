@@ -42,9 +42,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composeproductlister_cleanmvvm.core.navigation.Home
+import com.example.composeproductlister_cleanmvvm.core.navigation.ShoppingCart
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.DetailViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
@@ -55,10 +58,11 @@ import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartSc
 fun ScaffoldMainScreen(
     productsViewModel: ProductsViewModel,
     detailViewModel: DetailViewModel,
+    navController: NavController,
     navigateToDetail: (Int) -> Unit
 ) {
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
-    val navController = rememberNavController()
+    //val navController = rememberNavController()
     productsViewModel.onNavigateToDetail = navigateToDetail
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +97,7 @@ fun ScaffoldMainScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        IconButton(onClick = { navController.navigate("HomeProducts") }) {
+                        IconButton(onClick = { navController.navigate(Home) }) {
                             Icon(
                                 Icons.Filled.Home,
                                 contentDescription = "Home"
@@ -105,7 +109,7 @@ fun ScaffoldMainScreen(
                                 contentDescription = "Search products",
                             )
                         }
-                        IconButton(onClick = { navController.navigate("ShoppingCart") }) {
+                        IconButton(onClick = {  navController.navigate(ShoppingCart)  }) {
                             Icon(
                                 Icons.Filled.ShoppingCart,
                                 contentDescription = "ShoppingCart",
@@ -119,15 +123,6 @@ fun ScaffoldMainScreen(
                         }
                     }
                 },
-                /*floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { },
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                    ) {
-                        Icon(Icons.Filled.ShoppingCart, "ShoppingCart")
-                    }
-                }*/
             )
         },
 /*        floatingActionButton = {
@@ -136,7 +131,8 @@ fun ScaffoldMainScreen(
             }
         }*/
     ) { innerPadding ->
-        NavHost(
+
+        /*NavHost(
             navController = navController,
             startDestination = "HomeProducts",
             modifier = Modifier.padding(innerPadding)
@@ -152,9 +148,9 @@ fun ScaffoldMainScreen(
                     detailViewModel = detailViewModel
                 )
             }
-        }
+        }*/
 
-        /*Column(
+        Column(
             modifier = Modifier.padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -162,6 +158,6 @@ fun ScaffoldMainScreen(
                 productsViewModel = productsViewModel,
                 navigateToDetail  = navigateToDetail
             )
-        }*/
+        }
     }
 }
