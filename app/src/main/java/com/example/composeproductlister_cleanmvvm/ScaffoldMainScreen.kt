@@ -56,18 +56,9 @@ import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartSc
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldMainScreen(
-    productsViewModel: ProductsViewModel,
-    detailViewModel: DetailViewModel,
     navController: NavController,
-    navigateToDetail: (Int) -> Unit
+    content: @Composable (Modifier) -> Unit // Get a composable function with Modifier
 ) {
-    /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
-    //val navController = rememberNavController()
-    productsViewModel.onNavigateToDetail = navigateToDetail
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var presses by remember { mutableIntStateOf(0) }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,7 +88,11 @@ fun ScaffoldMainScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        IconButton(onClick = { navController.navigate(Home) }) {
+                        IconButton(onClick = {
+                            navController.navigate(Home) {
+                                popUpTo<Home> { inclusive = true }
+                            }
+                        }) {
                             Icon(
                                 Icons.Filled.Home,
                                 contentDescription = "Home"
@@ -109,7 +104,14 @@ fun ScaffoldMainScreen(
                                 contentDescription = "Search products",
                             )
                         }
-                        IconButton(onClick = {  navController.navigate(ShoppingCart)  }) {
+                        IconButton(onClick = {
+                            navController.navigate(ShoppingCart) {
+                                // Keeps the home screen in the stack
+                                popUpTo(Home) { inclusive = false }
+                                // Avoid duplicating ShoppingCart if it is already at the top
+                                launchSingleTop = true
+                            }
+                        }) {
                             Icon(
                                 Icons.Filled.ShoppingCart,
                                 contentDescription = "ShoppingCart",
@@ -131,33 +133,8 @@ fun ScaffoldMainScreen(
             }
         }*/
     ) { innerPadding ->
-
-        /*NavHost(
-            navController = navController,
-            startDestination = "HomeProducts",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("HomeProducts") {
-                ProductsScreen(
-                    productsViewModel = productsViewModel,
-                    navigateToDetail  = navigateToDetail
-                )
-            }
-            composable("ShoppingCart") {
-                ShoppingCartScreen(
-                    detailViewModel = detailViewModel
-                )
-            }
-        }*/
-
-        Column(
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            ProductsScreen(
-                productsViewModel = productsViewModel,
-                navigateToDetail  = navigateToDetail
-            )
-        }
+        /** It is important to know that the content of the screens is being returned by
+         * NavigationWrapper.kt **/
+        content(Modifier.padding(innerPadding))
     }
 }
