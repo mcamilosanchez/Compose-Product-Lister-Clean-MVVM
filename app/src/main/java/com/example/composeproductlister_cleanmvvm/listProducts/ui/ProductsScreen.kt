@@ -99,7 +99,6 @@ fun ProductsList(
     products: List<ProductModelDomain>,
     navigateToDetail: (Int) -> Unit
 ) {
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         content = {

@@ -48,23 +48,23 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.DetailViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartViewModel
 
 @Composable
 fun DetailScreen(
     productId: Int,
-    detailViewModel: DetailViewModel,
+    shoppingCartViewModel: ShoppingCartViewModel,
     onBackClick: () -> Unit
 ) {
 
     // Query the product from the ViewModel
-    val product = detailViewModel.getProductById(productId).observeAsState().value
+    val product = shoppingCartViewModel.getProductById(productId).observeAsState().value
 
     // Show content only if product is not null
     product?.let {
         DetailContent(
             product = it,
-            detailViewModel,
+            shoppingCartViewModel,
             onBackClick)
     } ?: run {
         Text(
@@ -78,7 +78,7 @@ fun DetailScreen(
 @Composable
 fun DetailContent(
     product: ProductModelDomain,
-    detailViewModel: DetailViewModel,
+    shoppingCartViewModel: ShoppingCartViewModel,
     onBackClick: () -> Unit) {
 
     Scaffold(
@@ -104,7 +104,7 @@ fun DetailContent(
                     Divider()
                     Description(product)
                     Divider()
-                    ButtonCart(product, detailViewModel)
+                    ButtonCart(product, shoppingCartViewModel)
                 }
             }
         }
@@ -112,10 +112,10 @@ fun DetailContent(
 }
 
 @Composable
-fun ButtonCart(product: ProductModelDomain, detailViewModel: DetailViewModel,) {
+fun ButtonCart(product: ProductModelDomain, shoppingCartViewModel: ShoppingCartViewModel,) {
     Button(
         onClick = {
-            detailViewModel.listProductIdCart(product.id)
+            shoppingCartViewModel.listProductIdCart(product)
         },
         modifier = Modifier.padding(16.dp).fillMaxWidth()
     ) {
