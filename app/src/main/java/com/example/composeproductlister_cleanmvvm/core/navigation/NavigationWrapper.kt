@@ -9,9 +9,9 @@ import androidx.navigation.navArgument
 import com.example.composeproductlister_cleanmvvm.DetailScreen
 import com.example.composeproductlister_cleanmvvm.ScaffoldMainScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartScreen
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
 fun NavigationWrapper(

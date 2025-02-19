@@ -48,7 +48,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
 fun DetailScreen(
@@ -115,7 +115,7 @@ fun DetailContent(
 fun ButtonCart(product: ProductModelDomain, shoppingCartViewModel: ShoppingCartViewModel,) {
     Button(
         onClick = {
-            shoppingCartViewModel.listProductIdCart(product)
+            shoppingCartViewModel.addProductToShoppingCart(product)
         },
         modifier = Modifier.padding(16.dp).fillMaxWidth()
     ) {

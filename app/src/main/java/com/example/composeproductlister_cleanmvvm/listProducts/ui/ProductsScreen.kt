@@ -1,6 +1,5 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -37,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.ui.theme.ComposeProductLister_CleanMVVMTheme
 import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
 import com.example.composeproductlister_cleanmvvm.utils.Status

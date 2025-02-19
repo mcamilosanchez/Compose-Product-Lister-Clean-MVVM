@@ -1,4 +1,4 @@
-package com.example.composeproductlister_cleanmvvm.listProducts.ui
+package com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData

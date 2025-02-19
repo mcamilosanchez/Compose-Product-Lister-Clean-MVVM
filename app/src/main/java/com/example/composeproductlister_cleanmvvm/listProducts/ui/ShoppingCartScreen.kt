@@ -2,7 +2,6 @@ package com.example.composeproductlister_cleanmvvm.listProducts.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,11 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,9 +30,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,11 +38,13 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
 fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
 
-    val mapProductsCart: MutableMap<ProductModelDomain, Int> = shoppingCartViewModel.mapProductsCart
+    val mapProductsCart: Map<ProductModelDomain, Int> =
+        shoppingCartViewModel.productsMapStateShoppingCart
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -70,7 +63,11 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
                 columns = GridCells.Fixed(1),
                 content = {
                     items(mapProductsCart.toList()) { (product, quantity) ->
-                        ItemShoppingCart(product, quantity)
+                        ItemShoppingCart(
+                            shoppingCartViewModel = shoppingCartViewModel,
+                            product = product,
+                            quantity = quantity
+                        )
                     }
                 }
             )
@@ -79,7 +76,11 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
 }
 
 @Composable
-fun ItemShoppingCart(product: ProductModelDomain, quantity: Int) {
+fun ItemShoppingCart(
+    shoppingCartViewModel: ShoppingCartViewModel,
+    product: ProductModelDomain,
+    quantity: Int
+) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,15 +93,20 @@ fun ItemShoppingCart(product: ProductModelDomain, quantity: Int) {
         ) {
             ImageProduct(product)
             Spacer(modifier = Modifier.width(8.dp))
-            InfoAndQtyProduct(product, quantity)
+            InfoAndQtyProduct(shoppingCartViewModel, product, quantity)
         }
     }
 }
 
 @Composable
-fun InfoAndQtyProduct(product: ProductModelDomain, quantity: Int) {
+fun InfoAndQtyProduct(
+    shoppingCartViewModel: ShoppingCartViewModel,
+    product: ProductModelDomain,
+    quantity: Int
+) {
     Column (
-        modifier = Modifier.padding(bottom = 8.dp)
+        modifier = Modifier
+            .padding(bottom = 8.dp)
             .fillMaxHeight()
             .fillMaxWidth()
     ) {
@@ -111,7 +117,7 @@ fun InfoAndQtyProduct(product: ProductModelDomain, quantity: Int) {
                 .clip(CircleShape)
         ) {
             IconButton(
-                onClick = { },
+                onClick = { shoppingCartViewModel.onProductRemove(product) },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -135,9 +141,14 @@ fun InfoAndQtyProduct(product: ProductModelDomain, quantity: Int) {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PriceProduct(modifier = Modifier.weight(0.5f))
+            PriceProduct(
+                modifier = Modifier.weight(0.5f),
+                shoppingCartViewModel = shoppingCartViewModel
+            )
 
             QtyProduct(
+                shoppingCartViewModel = shoppingCartViewModel,
+                product = product,
                 quantity = quantity,
                 modifier = Modifier.weight(0.5f)
             )
@@ -146,7 +157,12 @@ fun InfoAndQtyProduct(product: ProductModelDomain, quantity: Int) {
 }
 
 @Composable
-fun QtyProduct(quantity: Int, modifier: Modifier) {
+fun QtyProduct(
+    shoppingCartViewModel: ShoppingCartViewModel,
+    product: ProductModelDomain,
+    quantity: Int,
+    modifier: Modifier
+) {
     Row (
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -164,7 +180,9 @@ fun QtyProduct(quantity: Int, modifier: Modifier) {
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             IconButton(
-                onClick = { },
+                onClick = {
+                    shoppingCartViewModel.onProductAddQty(product)
+                    shoppingCartViewModel.getPriceProduct(product, quantity).toString() },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -189,7 +207,9 @@ fun QtyProduct(quantity: Int, modifier: Modifier) {
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             IconButton(
-                onClick = { },
+                onClick = {
+                    shoppingCartViewModel.onProductReduceQty(product)
+                    shoppingCartViewModel.getPriceProduct(product, quantity).toString() },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -203,11 +223,17 @@ fun QtyProduct(quantity: Int, modifier: Modifier) {
 }
 
 @Composable
-fun PriceProduct(modifier: Modifier) {
+fun PriceProduct(
+    modifier: Modifier,
+    shoppingCartViewModel: ShoppingCartViewModel
+) {
+
+    val price = shoppingCartViewModel.productPriceShoppingCart.doubleValue
+
     Text(
         modifier = modifier
             .padding(end = 16.dp),
-        text = "$ 1000",
+        text = "$${"%.2f".format(price)}",
         textAlign = TextAlign.Start,
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.primary,
