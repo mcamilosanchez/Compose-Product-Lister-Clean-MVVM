@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,14 +38,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ShoppingCartProductUIModel
 
 @Composable
 fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
 
-    val mapProductsCart: Map<ProductModelDomain, Int> =
-        shoppingCartViewModel.productsMapStateShoppingCart
+    // val mapProductsCart: State<Map<ProductModelUI, Int>> = shoppingCartViewModel.productsMapStateShoppingCartPROOF
+
+    val mainListShoppingCart: List<ShoppingCartProductUIModel> by remember {
+        derivedStateOf { shoppingCartViewModel.mainListShoppingCart }
+    }
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -55,18 +64,17 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
                     .fillMaxWidth()
                     .height(40.dp)
                     .padding(horizontal = 8.dp, vertical = 8.dp),
-                text = "Order (${mapProductsCart.size} items)",
+                text = "Order (${mainListShoppingCart.size} items)",
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleLarge,
             )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1),
                 content = {
-                    items(mapProductsCart.toList()) { (product, quantity) ->
-                        ItemShoppingCart(
+                    items(mainListShoppingCart.toList()) { productCartItem ->
+                    ItemShoppingCart(
                             shoppingCartViewModel = shoppingCartViewModel,
-                            product = product,
-                            quantity = quantity
+                            productCart = productCartItem
                         )
                     }
                 }
@@ -78,8 +86,7 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
 @Composable
 fun ItemShoppingCart(
     shoppingCartViewModel: ShoppingCartViewModel,
-    product: ProductModelDomain,
-    quantity: Int
+    productCart: ShoppingCartProductUIModel
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -87,13 +94,13 @@ fun ItemShoppingCart(
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(12.dp))
     ) {
-        Row (
+        Row(
             modifier = Modifier.padding(end = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ImageProduct(product)
+            ImageProduct(productCart.thumbnail)
             Spacer(modifier = Modifier.width(8.dp))
-            InfoAndQtyProduct(shoppingCartViewModel, product, quantity)
+            InfoAndQtyProduct(shoppingCartViewModel, productCart)
         }
     }
 }
@@ -101,10 +108,9 @@ fun ItemShoppingCart(
 @Composable
 fun InfoAndQtyProduct(
     shoppingCartViewModel: ShoppingCartViewModel,
-    product: ProductModelDomain,
-    quantity: Int
+    productCart: ShoppingCartProductUIModel
 ) {
-    Column (
+    Column(
         modifier = Modifier
             .padding(bottom = 8.dp)
             .fillMaxHeight()
@@ -117,7 +123,7 @@ fun InfoAndQtyProduct(
                 .clip(CircleShape)
         ) {
             IconButton(
-                onClick = { shoppingCartViewModel.onProductRemove(product) },
+                onClick = { /*shoppingCartViewModel.onProductRemove(productCart)*/ },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -129,7 +135,7 @@ fun InfoAndQtyProduct(
         }
         Text(
             modifier = Modifier.padding(bottom = 8.dp),
-            text = product.title,
+            text = productCart.title,
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
@@ -137,7 +143,7 @@ fun InfoAndQtyProduct(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -148,8 +154,7 @@ fun InfoAndQtyProduct(
 
             QtyProduct(
                 shoppingCartViewModel = shoppingCartViewModel,
-                product = product,
-                quantity = quantity,
+                productCart = productCart,
                 modifier = Modifier.weight(0.5f)
             )
         }
@@ -159,11 +164,10 @@ fun InfoAndQtyProduct(
 @Composable
 fun QtyProduct(
     shoppingCartViewModel: ShoppingCartViewModel,
-    product: ProductModelDomain,
-    quantity: Int,
+    productCart: ShoppingCartProductUIModel,
     modifier: Modifier
 ) {
-    Row (
+    Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -181,8 +185,9 @@ fun QtyProduct(
         ) {
             IconButton(
                 onClick = {
-                    shoppingCartViewModel.onProductAddQty(product)
-                    shoppingCartViewModel.getPriceProduct(product, quantity).toString() },
+                    /*shoppingCartViewModel.onProductAddQty(product)
+                    shoppingCartViewModel.getPriceProduct(product, quantity).toString()*/
+                },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -194,7 +199,7 @@ fun QtyProduct(
         }
         Text(
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-            text = quantity.toString(),
+            text = productCart.quantity.toString(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold,
@@ -208,8 +213,9 @@ fun QtyProduct(
         ) {
             IconButton(
                 onClick = {
-                    shoppingCartViewModel.onProductReduceQty(product)
-                    shoppingCartViewModel.getPriceProduct(product, quantity).toString() },
+                    /*shoppingCartViewModel.onProductReduceQty(product)
+                    shoppingCartViewModel.getPriceProduct(product, quantity).toString()*/
+                },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -244,8 +250,8 @@ fun PriceProduct(
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ImageProduct(product: ProductModelDomain) {
-    Box (
+fun ImageProduct(productImage: String) {
+    Box(
         modifier = Modifier
             .size(100.dp)
             .padding(8.dp)
@@ -254,9 +260,9 @@ fun ImageProduct(product: ProductModelDomain) {
             .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
-        if (product.thumbnail.isNotEmpty()) {
+        if (productImage.isNotEmpty()) {
             GlideImage(
-                model = product.thumbnail,
+                model = productImage,
                 contentDescription = "Product Shopping Cart Image",
                 modifier = Modifier
                     .size(100.dp)

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.ui.theme.ComposeProductLister_CleanMVVMTheme
 import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
@@ -95,7 +96,7 @@ fun ProductsScreen(
 
 @Composable
 fun ProductsList(
-    products: List<ProductModelDomain>,
+    products: List<ProductModelUI>,
     navigateToDetail: (Int) -> Unit
 ) {
     LazyVerticalGrid(
@@ -115,7 +116,7 @@ fun ProductsList(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ItemProduct(
-    product: ProductModelDomain,
+    product: ProductModelUI,
     navigateToDetail: (Int) -> Unit
 ) {
     OutlinedCard(

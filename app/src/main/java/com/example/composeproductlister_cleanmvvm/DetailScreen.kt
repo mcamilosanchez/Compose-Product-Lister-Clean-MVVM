@@ -1,5 +1,6 @@
 package com.example.composeproductlister_cleanmvvm
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +49,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
@@ -56,7 +58,6 @@ fun DetailScreen(
     shoppingCartViewModel: ShoppingCartViewModel,
     onBackClick: () -> Unit
 ) {
-
     // Query the product from the ViewModel
     val product = shoppingCartViewModel.getProductById(productId).observeAsState().value
 
@@ -77,7 +78,7 @@ fun DetailScreen(
 
 @Composable
 fun DetailContent(
-    product: ProductModelDomain,
+    product: ProductModelUI,
     shoppingCartViewModel: ShoppingCartViewModel,
     onBackClick: () -> Unit) {
 
@@ -112,10 +113,12 @@ fun DetailContent(
 }
 
 @Composable
-fun ButtonCart(product: ProductModelDomain, shoppingCartViewModel: ShoppingCartViewModel,) {
+fun ButtonCart(product: ProductModelUI, shoppingCartViewModel: ShoppingCartViewModel,) {
+    val listProductsCart = shoppingCartViewModel.mainListShoppingCart
     Button(
         onClick = {
             shoppingCartViewModel.addProductToShoppingCart(product)
+            shoppingCartViewModel.getMainListShoppingCart()
         },
         modifier = Modifier.padding(16.dp).fillMaxWidth()
     ) {
@@ -138,7 +141,7 @@ fun ButtonCart(product: ProductModelDomain, shoppingCartViewModel: ShoppingCartV
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ImagesCarousel(product: ProductModelDomain) {
+fun ImagesCarousel(product: ProductModelUI) {
 
     val pagerState = rememberPagerState(pageCount = { product.images.size })
 
@@ -147,7 +150,7 @@ fun ImagesCarousel(product: ProductModelDomain) {
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(120.dp)
                 .background(MaterialTheme.colorScheme.secondaryContainer)
         ) { page ->
             val imageUrl = product.images[page]
@@ -201,7 +204,7 @@ fun ImagesCarousel(product: ProductModelDomain) {
 }
 
 @Composable
-fun RateProduct(product: ProductModelDomain) {
+fun RateProduct(product: ProductModelUI) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(40.dp)
@@ -298,7 +301,7 @@ fun RateProduct(product: ProductModelDomain) {
 }
 
 @Composable
-fun TitlePriceProduct(product: ProductModelDomain) {
+fun TitlePriceProduct(product: ProductModelUI) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -332,7 +335,7 @@ fun TitlePriceProduct(product: ProductModelDomain) {
 }
 
 @Composable
-fun Description(product: ProductModelDomain) {
+fun Description(product: ProductModelUI) {
     Box(
         modifier = Modifier
             .fillMaxWidth()

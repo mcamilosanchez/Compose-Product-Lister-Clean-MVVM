@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.GetProductsCaseUse
 import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.mapper.toProductUIModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.mapper.toShoppingCartUIModel
 import com.example.composeproductlister_cleanmvvm.utils.ResultWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,11 +23,11 @@ class ProductsViewModel @Inject constructor(
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean> = _showDialog
 
-    private val _products = mutableStateListOf<ProductModelDomain>()
-    val products: List<ProductModelDomain> = _products
+    private val _products = mutableStateListOf<ProductModelUI>()
+    val products: List<ProductModelUI> = _products
 
-    private val _status = MutableLiveData<ResultWrapper<List<ProductModelDomain>>>()
-    val status: LiveData<ResultWrapper<List<ProductModelDomain>>> = _status
+    private val _status = MutableLiveData<ResultWrapper<List<ProductModelUI>>>()
+    val status: LiveData<ResultWrapper<List<ProductModelUI>>> = _status
 
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
     var onNavigateToDetail: ((Int) -> Unit)? = null
@@ -56,7 +59,13 @@ class ProductsViewModel @Inject constructor(
         viewModelScope.launch {
             _status.value = ResultWrapper.loading(data = null)
             try {
+
+                /** getProductsUseCase() returns a list of ProductModelDomain, but since we are
+                 * in the ViewModel, that is, in the UI layer, we must perform a map that converts
+                 * this list to a UI model corresponding to the UI layer. **/
                 val listProducts = getProductsUseCase()
+                    .map { it.toProductUIModel() } ?: emptyList()
+
                 _status.value = ResultWrapper.success(listProducts)
                 _products.clear()
                 _products.addAll(listProducts ?: emptyList())
