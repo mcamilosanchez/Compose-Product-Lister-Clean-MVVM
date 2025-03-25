@@ -48,12 +48,9 @@ import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ShoppingC
 @Composable
 fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
 
-    // val mapProductsCart: State<Map<ProductModelUI, Int>> = shoppingCartViewModel.productsMapStateShoppingCartPROOF
-
     val mainListShoppingCart: List<ShoppingCartProductUIModel> by remember {
         derivedStateOf { shoppingCartViewModel.mainListShoppingCart }
     }
-
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -123,7 +120,7 @@ fun InfoAndQtyProduct(
                 .clip(CircleShape)
         ) {
             IconButton(
-                onClick = { /*shoppingCartViewModel.onProductRemove(productCart)*/ },
+                onClick = { shoppingCartViewModel.onProductRemove(productCart.id) },
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Icon(
@@ -149,7 +146,8 @@ fun InfoAndQtyProduct(
         ) {
             PriceProduct(
                 modifier = Modifier.weight(0.5f),
-                shoppingCartViewModel = shoppingCartViewModel
+                shoppingCartViewModel = shoppingCartViewModel,
+                productCart = productCart,
             )
 
             QtyProduct(
@@ -185,8 +183,7 @@ fun QtyProduct(
         ) {
             IconButton(
                 onClick = {
-                    /*shoppingCartViewModel.onProductAddQty(product)
-                    shoppingCartViewModel.getPriceProduct(product, quantity).toString()*/
+                    shoppingCartViewModel.onProductAddQty(productCart.id)
                 },
                 modifier = Modifier.align(Alignment.Center)
             ) {
@@ -213,8 +210,7 @@ fun QtyProduct(
         ) {
             IconButton(
                 onClick = {
-                    /*shoppingCartViewModel.onProductReduceQty(product)
-                    shoppingCartViewModel.getPriceProduct(product, quantity).toString()*/
+                    shoppingCartViewModel.onProductReduceQty(productCart.id)
                 },
                 modifier = Modifier.align(Alignment.Center)
             ) {
@@ -231,15 +227,13 @@ fun QtyProduct(
 @Composable
 fun PriceProduct(
     modifier: Modifier,
-    shoppingCartViewModel: ShoppingCartViewModel
+    shoppingCartViewModel: ShoppingCartViewModel,
+    productCart : ShoppingCartProductUIModel,
 ) {
-
-    val price = shoppingCartViewModel.productPriceShoppingCart.doubleValue
-
     Text(
         modifier = modifier
             .padding(end = 16.dp),
-        text = "$${"%.2f".format(price)}",
+        text = "$${"%.2f".format(productCart.priceShoppingCart)}",
         textAlign = TextAlign.Start,
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.primary,

@@ -11,12 +11,14 @@ import com.example.composeproductlister_cleanmvvm.ScaffoldMainScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartScreen
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.DetailViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
 fun NavigationWrapper(
     productsViewModel: ProductsViewModel,
-    shoppingCartViewModel: ShoppingCartViewModel
+    shoppingCartViewModel: ShoppingCartViewModel,
+    detailViewModel: DetailViewModel
 ) {
 
     val navController = rememberNavController()
@@ -44,6 +46,7 @@ fun NavigationWrapper(
                 if (productId != null) {
                     DetailScreen(
                         shoppingCartViewModel = shoppingCartViewModel,
+                        detailViewModel = detailViewModel,
                         productId = productId,
                         onBackClick = { navController.popBackStack() }
                     )

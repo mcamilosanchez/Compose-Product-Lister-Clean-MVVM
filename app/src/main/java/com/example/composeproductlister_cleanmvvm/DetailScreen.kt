@@ -48,18 +48,19 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.DetailViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
 @Composable
 fun DetailScreen(
     productId: Int,
     shoppingCartViewModel: ShoppingCartViewModel,
+    detailViewModel: DetailViewModel,
     onBackClick: () -> Unit
 ) {
     // Query the product from the ViewModel
-    val product = shoppingCartViewModel.getProductById(productId).observeAsState().value
+    val product = detailViewModel.getProductById(productId).observeAsState().value
 
     // Show content only if product is not null
     product?.let {
@@ -114,11 +115,9 @@ fun DetailContent(
 
 @Composable
 fun ButtonCart(product: ProductModelUI, shoppingCartViewModel: ShoppingCartViewModel,) {
-    val listProductsCart = shoppingCartViewModel.mainListShoppingCart
     Button(
         onClick = {
             shoppingCartViewModel.addProductToShoppingCart(product)
-            shoppingCartViewModel.getMainListShoppingCart()
         },
         modifier = Modifier.padding(16.dp).fillMaxWidth()
     ) {
