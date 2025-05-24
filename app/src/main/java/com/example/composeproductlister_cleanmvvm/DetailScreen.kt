@@ -1,5 +1,11 @@
 package com.example.composeproductlister_cleanmvvm
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +29,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,22 +53,32 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.composeproductlister_cleanmvvm.listProducts.domain.data.ProductModelDomain
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.DetailViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.data.ProductModelUI
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.DetailViewModel
+import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ShoppingCartViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DetailScreen(
     productId: Int,
+    shoppingCartViewModel: ShoppingCartViewModel,
     detailViewModel: DetailViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
-
-    //Query the product from the ViewModel
+    // Query the product from the ViewModel
     val product = detailViewModel.getProductById(productId).observeAsState().value
 
-    //Show content only if product is not null
+    // Show content only if product is not null
     product?.let {
-        DetailContent(product = it, onBackClick)
+        DetailContent(
+            product = it,
+            shoppingCartViewModel = shoppingCartViewModel,
+            onBackClick = onBackClick,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedVisibilityScope = animatedVisibilityScope
+        )
     } ?: run {
         Text(
             text = "Loading product...",
@@ -70,9 +88,15 @@ fun DetailScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun DetailContent(product: ProductModelDomain, onBackClick: () -> Unit) {
-
+fun DetailContent(
+    product: ProductModelUI,
+    shoppingCartViewModel: ShoppingCartViewModel,
+    onBackClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
     Scaffold(
         topBar = { TopAppBar(onBackClick) }
     ) { innerPadding ->
@@ -81,85 +105,143 @@ fun DetailContent(product: ProductModelDomain, onBackClick: () -> Unit) {
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.secondaryContainer),
-            horizontalAlignment = Alignment.CenterHorizontally)
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
         {
-            ImagesCarousel(product)
-
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(MaterialTheme.colorScheme.surface)
+            with(sharedTransitionScope) {
+                ImagesCarousel(
+                    product = product,
+                    sharedTransitionScope = this,
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     RateProduct(product)
-                    TitlePriceProduct(product)
+                    with(sharedTransitionScope) {
+                        TitlePriceProduct(
+                            product = product,
+                            sharedTransitionScope = this,
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                    }
                     Divider()
                     Description(product)
                     Divider()
+                    ButtonCart(product, shoppingCartViewModel)
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ImagesCarousel(product: ProductModelDomain) {
-
-    val pagerState = rememberPagerState(pageCount = { product.images.size })
-
-    Box(modifier = Modifier.fillMaxWidth()) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-        ) { page ->
-            val imageUrl = product.images[page]
-            GlideImage(
-                model = imageUrl,
-                contentDescription = "Product Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                requestBuilderTransform = { requestOptions ->
-                    requestOptions
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.placeholder_image)
-                        .error(android.R.drawable.stat_notify_error)
-                }
+fun ButtonCart(product: ProductModelUI, shoppingCartViewModel: ShoppingCartViewModel,) {
+    Button(
+        onClick = {
+            shoppingCartViewModel.addProductToShoppingCart(product)
+        },
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "IconArt"
+            )
+            Text(
+                text = "Add to cart",
+                fontSize = 18.sp,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
-        if (product.images.size >=2) {
-            Row(
-                Modifier
-                    .wrapContentHeight()
-                    .wrapContentWidth()
-                    .align(Alignment.BottomCenter)
-                    .offset(y = ((0).dp))
-                    .padding(bottom = 8.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.background,
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(pagerState.pageCount) { iteration ->
-                    val color =
-                        if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary
-                        else Color.LightGray
-                    Box(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .clip(CircleShape)
-                            .background(color)
-                            .size(12.dp)
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalSharedTransitionApi::class)
+@Composable
+fun ImagesCarousel(
+    product: ProductModelUI,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
+    with(sharedTransitionScope) {
+        val pagerState = rememberPagerState(pageCount = { product.images.size })
+        Box(modifier = Modifier.fillMaxWidth()
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(230.dp)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .sharedBounds(
+                        sharedContentState = rememberSharedContentState(key = "product-${product.id}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                        resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
                     )
+            ) { page ->
+                val imageUrl = product.images[page]
+                GlideImage(
+                    model = imageUrl,
+                    contentDescription = "Product Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(230.dp)
+                        .sharedElement(
+                            rememberSharedContentState(key = "image-${product.id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                        .clip(
+                            RoundedCornerShape(12.dp)
+                        ),
+                    requestBuilderTransform = { requestOptions ->
+                        requestOptions
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.placeholder_image)
+                            .error(android.R.drawable.stat_notify_error)
+                    }
+                )
+            }
+            if (product.images.size >=2) {
+                Row(
+                    Modifier
+                        .wrapContentHeight()
+                        .wrapContentWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(
+                            width = 2.dp,
+                            color = MaterialTheme.colorScheme.background,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    repeat(pagerState.pageCount) { iteration ->
+                        val color =
+                            if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary
+                            else Color.LightGray
+                        Box(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .clip(CircleShape)
+                                .background(color)
+                                .size(12.dp)
+                        )
+                    }
                 }
             }
         }
@@ -167,7 +249,7 @@ fun ImagesCarousel(product: ProductModelDomain) {
 }
 
 @Composable
-fun RateProduct(product: ProductModelDomain) {
+fun RateProduct(product: ProductModelUI) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(40.dp)
@@ -237,7 +319,10 @@ fun RateProduct(product: ProductModelDomain) {
                     .weight(1f)
                     .fillMaxHeight()
             ) {
-                Row(Modifier.align(Alignment.Center).padding(start = 4.dp, end = 4.dp)) {
+                Row(
+                    Modifier
+                        .align(Alignment.Center)
+                        .padding(start = 4.dp, end = 4.dp)) {
                     Text(
                         text = "Brand: ",
                         fontSize = 16.sp,
@@ -260,42 +345,58 @@ fun RateProduct(product: ProductModelDomain) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun TitlePriceProduct(product: ProductModelDomain) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Row (
+fun TitlePriceProduct(
+    product: ProductModelUI,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope
+) {
+    with(sharedTransitionScope) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = product.title,
-                fontSize = 25.sp,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+            Row (
                 modifier = Modifier
-                    .weight(0.6f, fill = false)
-                    .padding(end = 12.dp)
-            )
-            Text(
-                text = "$${product.price.toString()}",
-                fontSize = 25.sp,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .align(Alignment.CenterVertically)
-            )
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(0.6f, fill = false)
+                        .padding(end = 12.dp)
+/*                        .sharedElement(
+                            rememberSharedContentState(key = "product-${product.title}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )*/,
+                    text = product.title,
+                    fontSize = 25.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+
+                )
+                Text(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .align(Alignment.CenterVertically)
+/*                        .sharedElement(
+                            rememberSharedContentState(key = "product-${product.price}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )*/,
+                    text = "$${product.price.toString()}",
+                    fontSize = 25.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun Description(product: ProductModelDomain) {
+fun Description(product: ProductModelUI) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
