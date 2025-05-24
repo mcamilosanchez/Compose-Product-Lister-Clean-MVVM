@@ -2,6 +2,7 @@ package com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model
 
 import android.util.Log
 import androidx.compose.runtime.MutableDoubleState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
@@ -28,6 +29,10 @@ class ShoppingCartViewModel @Inject constructor(
     private val _mainListShoppingCart = mutableStateListOf<ShoppingCartProductUIModel>()
     val mainListShoppingCart: List<ShoppingCartProductUIModel> get() = _mainListShoppingCart
 
+    private var _totalPriceShoppingCart = mutableDoubleStateOf(0.0)
+    val totalPriceShoppingCart: State<Double> = _totalPriceShoppingCart
+
+
     init {
         fetchCartProducts()
     }
@@ -42,6 +47,8 @@ class ShoppingCartViewModel @Inject constructor(
                 priceShoppingCart = (product.price ?: 0.0) * (existingProduct.quantity + 1)
             )
             _mainListShoppingCart[_mainListShoppingCart.indexOf(existingProduct)] = updatedProduct
+            calculateTotalPriceShoppingCart()
+
         } else {
             _mainListShoppingCart.add(
                 ShoppingCartProductUIModel(
@@ -53,6 +60,7 @@ class ShoppingCartViewModel @Inject constructor(
                     priceShoppingCart = product.price ?: 0.0
                 )
             )
+            calculateTotalPriceShoppingCart()
         }
     }
 
@@ -85,6 +93,7 @@ class ShoppingCartViewModel @Inject constructor(
 
     fun onProductRemove(productId: Int) {
         _mainListShoppingCart.removeAll { it.id == productId }
+        calculateTotalPriceShoppingCart()
     }
 
     fun onProductReduceQty(productId: Int) {
@@ -96,8 +105,10 @@ class ShoppingCartViewModel @Inject constructor(
                     priceShoppingCart = (existingProduct.priceShoppingCart / existingProduct.quantity) * (existingProduct.quantity - 1)
                 )
                 _mainListShoppingCart[_mainListShoppingCart.indexOf(existingProduct)] = updatedProduct
+                calculateTotalPriceShoppingCart()
             } else {
                 onProductRemove(productId)
+                calculateTotalPriceShoppingCart()
             }
         }
     }
@@ -110,6 +121,11 @@ class ShoppingCartViewModel @Inject constructor(
                 priceShoppingCart = (existingProduct.priceShoppingCart / existingProduct.quantity) * (existingProduct.quantity + 1)
             )
             _mainListShoppingCart[mainListShoppingCart.indexOf(existingProduct)] = updatedProduct
+            calculateTotalPriceShoppingCart()
         }
+    }
+
+    private fun calculateTotalPriceShoppingCart() {
+        _totalPriceShoppingCart.doubleValue = _mainListShoppingCart.sumOf { it.priceShoppingCart }
     }
 }

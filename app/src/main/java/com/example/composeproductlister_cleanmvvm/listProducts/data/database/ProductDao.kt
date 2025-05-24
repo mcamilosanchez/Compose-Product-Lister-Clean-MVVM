@@ -10,7 +10,7 @@ import com.example.composeproductlister_cleanmvvm.listProducts.data.database.ent
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM product_table ORDER BY rating DESC ")
+    @Query("SELECT * FROM product_table ORDER BY title ASC ")
     suspend fun getAllProducts(): List<ProductEntity>
 
     //If there is a conflict when performing an insert, we can do a REPLACE, FAIL, ABORT...

@@ -2,8 +2,10 @@ package com.example.composeproductlister_cleanmvvm.listProducts.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +55,8 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
         derivedStateOf { shoppingCartViewModel.mainListShoppingCart }
     }
 
+    val totalPriceShoppingCart by shoppingCartViewModel.totalPriceShoppingCart
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -69,13 +74,51 @@ fun ShoppingCartScreen(shoppingCartViewModel: ShoppingCartViewModel) {
                 columns = GridCells.Fixed(1),
                 content = {
                     items(mainListShoppingCart.toList()) { productCartItem ->
-                    ItemShoppingCart(
+                        ItemShoppingCart(
                             shoppingCartViewModel = shoppingCartViewModel,
                             productCart = productCartItem
                         )
                     }
                 }
             )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(MaterialTheme.colorScheme.surface)
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Total:",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = "$${"%.2f".format(totalPriceShoppingCart)}",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Button(
+                    onClick = { },
+                    shape = RoundedCornerShape(12.dp),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
+                ) {
+                    Text(
+                        text = "Finalize Order",
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
         }
     }
 }
