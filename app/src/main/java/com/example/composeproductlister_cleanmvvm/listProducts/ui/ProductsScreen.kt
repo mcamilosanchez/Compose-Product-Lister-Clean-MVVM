@@ -77,8 +77,8 @@ fun ProductsScreen(
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 Status.ERROR -> { productsViewModel.onDialogShow() }
-                Status.SUCCESS ->  ProductsList(
-                    products = productsViewModel.products,
+                Status.SUCCESS ->  MainComposableProductList(
+                    productsViewModel = productsViewModel,
                     navigateToDetail = navigateToDetail,
                     sharedTransitionScope = sharedTransitionScope,
                     animatedVisibilityScope = animatedVisibilityScope
@@ -101,6 +101,31 @@ fun ProductsScreen(
             }
         }
     }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun MainComposableProductList(
+    productsViewModel: ProductsViewModel,
+    navigateToDetail: (Int) -> Unit,
+    sharedTransitionScope : SharedTransitionScope,
+    animatedVisibilityScope : AnimatedVisibilityScope
+) {
+    Column (modifier = Modifier.fillMaxSize()) {
+        Text(text = "Search...")
+        ProductsList(
+            products = productsViewModel.products,
+            navigateToDetail = navigateToDetail,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedVisibilityScope = animatedVisibilityScope
+        )
+
+    }
+}
+
+@Composable
+fun SearchAndFilter() {
+
 }
 
 
@@ -164,7 +189,7 @@ fun ItemProduct(
                             .height(120.dp)
                             .background(MaterialTheme.colorScheme.background)
                             .sharedElement(
-                                rememberSharedContentState (key = "image-${product.id}"),
+                                rememberSharedContentState(key = "image-${product.id}"),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                             .clip(RoundedCornerShape(12.dp)),

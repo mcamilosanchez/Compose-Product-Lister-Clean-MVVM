@@ -26,9 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.composeproductlister_cleanmvvm.core.navigation.Home
-import com.example.composeproductlister_cleanmvvm.core.navigation.SearchProduct
 import com.example.composeproductlister_cleanmvvm.core.navigation.ShoppingCart
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.SearchProductScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +73,7 @@ fun ScaffoldMainScreen(
                                 contentDescription = "Home"
                             )
                         }
-                        IconButton(onClick = {
+/*                        IconButton(onClick = {
                             navController.navigate(SearchProduct) {
                                 // Keeps the home screen in the stack
                                 popUpTo(Home) { inclusive = false }
@@ -87,7 +85,7 @@ fun ScaffoldMainScreen(
                                 Icons.Filled.Search,
                                 contentDescription = "Search products",
                             )
-                        }
+                        }*/
                         IconButton(onClick = {
                             navController.navigate(ShoppingCart) {
                                 // Keeps the home screen in the stack

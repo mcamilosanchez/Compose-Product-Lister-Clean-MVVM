@@ -11,7 +11,6 @@ import androidx.navigation.navArgument
 import com.example.composeproductlister_cleanmvvm.DetailScreen
 import com.example.composeproductlister_cleanmvvm.ScaffoldMainScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ProductsScreen
-import com.example.composeproductlister_cleanmvvm.listProducts.ui.SearchProductScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.ProductsViewModel
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.ShoppingCartScreen
 import com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model.DetailViewModel
@@ -60,9 +59,6 @@ fun NavigationWrapper(
                             animatedVisibilityScope = this@composable
                         )
                     }
-                }
-                composable<SearchProduct> {
-                    SearchProductScreen()
                 }
                 composable<ShoppingCart> {
                     ShoppingCartScreen(
