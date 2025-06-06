@@ -1,6 +1,8 @@
 package com.example.composeproductlister_cleanmvvm.listProducts.ui.view_model
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +30,19 @@ class ProductsViewModel @Inject constructor(
 
     private val _status = MutableLiveData<ResultWrapper<List<ProductModelUI>>>()
     val status: LiveData<ResultWrapper<List<ProductModelUI>>> = _status
+
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> get() = _searchQuery
+
+    val filteredProducts: List<ProductModelUI>
+        // get() indica que es una propiedad calculada (no guarda un valor, lo calcula cada vez que se accede).
+        get() = if (_searchQuery.value.isBlank()) {
+            _products
+        } else {
+            _products.filter {
+                it.title.contains(_searchQuery.value, ignoreCase = true)
+            }
+        }
 
     /////////////////////////////////////////NAVIGATION/////////////////////////////////////////////
     var onNavigateToDetail: ((Int) -> Unit)? = null
@@ -79,5 +94,9 @@ class ProductsViewModel @Inject constructor(
                 _products.clear()
             }
         }
+    }
+
+    fun onQueryChange(query: String) {
+        _searchQuery.value = query
     }
 }
